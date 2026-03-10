@@ -2,15 +2,19 @@ import Anthropic from '@anthropic-ai/sdk';
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Message, Conversation } from './interfaces/chat.interfact'
+import { Message, Conversation } from './interfaces/chat.interfact';
+import { ContextService } from './context.service';
+
 
 // Temporarily persist chat to a local JSON
 const HISTORY_FILE = path.join(process.cwd(), 'chat-history.json');
+const COMPRESSION_TRIGGER: number = 3000;
 
 @Injectable()
 export class AppService {
   private client = new Anthropic({ apiKey : process.env.ANTHROPIC_API_KEY});
   private history: Message[] = [];
+  constructor(private readonly contextService: ContextService) {}
   
   onModuleInit() {
     if (fs.existsSync(HISTORY_FILE)) {
@@ -45,6 +49,16 @@ export class AppService {
     });
 
     const reply = (response.content[0] as any).text;
+    let input_tokens: number = response.usage.input_tokens;
+    let output_tokens: number = response.usage.output_tokens;
+    console.log("input tokens: ", input_tokens);
+    console.log("output tokens: ", output_tokens);
+    console.log("compression trigger: ", COMPRESSION_TRIGGER);
+
+    if (input_tokens + output_tokens >= COMPRESSION_TRIGGER) {
+      console.log("Hit the trigger.");
+      this.history = await this.contextService.compress(this.history);
+    }
     this.history.push( {role: 'assistant', content: reply} );
     this.saveHistory();
 

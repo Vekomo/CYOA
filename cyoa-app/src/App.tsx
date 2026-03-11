@@ -1,16 +1,5 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import ChatWindow from './components/ChatWindow'
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <h1>Hello, world.</h1>
-    </>
-  )
+export default function App() {
+  return <ChatWindow />
 }
-
-export default App

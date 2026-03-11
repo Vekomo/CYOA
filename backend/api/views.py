@@ -7,12 +7,13 @@ from rest_framework.response import Response
 
 @api_view(['POST'])
 def chat(request):
-    user_message = request.data.get('message')
-    user_key = request.data.get('key')
-    if not user_message:
+    print(request.data)
+    messages = request.data.get('messages', [])
+    user_key = request.data.get('api_key')
+    if not messages:
         return Response({"error": "Message is required"}, status=400)
 
     # Call the Anthropic API
-    response = "Hit the Django API: " + user_message
+    response = "Hit the Django API: " + str(messages) + " with key: " + str(user_key)
 
     return Response(response)

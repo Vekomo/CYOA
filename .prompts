@@ -1,1 +1,0 @@
-SUMMARY_PROMPT = [Can you squash the chat down including sections for: setting, a sequence of events, important character summaries/descriptions and their traits, and highlight emotionally relevant moments with direct quotes from the player/NPCs. The goal is to minimize token cost, but be detailed enough so information/context is preserved. Be concise!]

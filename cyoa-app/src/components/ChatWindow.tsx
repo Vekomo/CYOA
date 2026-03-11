@@ -15,7 +15,7 @@ export default function ChatWindow() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
         {messages.map(msg => (
-          <MessageBubble key={msg.id} message={msg} />
+          <MessageBubble key={msg.content} message={msg} />
         ))}
         <div ref={bottomRef} />
       </div>

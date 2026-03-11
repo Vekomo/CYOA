@@ -11,16 +11,13 @@ export default function ChatInput() {
     if (!text.trim() || isLoading) return
 
     const userMessage = {
-      id: crypto.randomUUID(),
       role: 'user' as const,
-      content: text,
-      timestamp: Date.now()
+      content: text
     }
 
     dispatch(addMessage(userMessage))        
-    dispatch(sendMessageThunk({             // kick off fake API call
-      messages: [userMessage],
-      apiKey: 'fake-key'
+    dispatch(sendMessageThunk({             
+      messages: [userMessage]
     }))
 
     setText('')

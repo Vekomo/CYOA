@@ -7,8 +7,8 @@ import { sendMessage } from '../lib/api'
 // pending → fulfilled → rejected, automatically
 export const sendMessageThunk = createAsyncThunk(
   'chat/sendMessage',
-  async ({ messages, apiKey }: { messages: Message[]; apiKey: string }) => {
-    const response = await sendMessage(messages, apiKey)
+  async ({ messages }: { messages: Message[]}) => {
+    const response = await sendMessage(messages)
     return response // this becomes `action.payload` in fulfilled
   }
 )
@@ -43,10 +43,8 @@ const chatSlice = createSlice({
       .addCase(sendMessageThunk.fulfilled, (state, action) => {
         state.isLoading = false
         state.messages.push({
-          id: crypto.randomUUID(),
           role: 'assistant',
-          content: action.payload.content,
-          timestamp: Date.now()
+          content: action.payload.content
         })
       })
       .addCase(sendMessageThunk.rejected, (state, action) => {
